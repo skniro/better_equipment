@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "butter_equipment",
+  "version": "${version}",
+  "name": "butter_equipment",
+  "description": "",
+  "authors": [
+    "skniro"
+  ],
+  "contact": {
+    "website": "https://www.curseforge.com/skniro",
+    "sources": "",
+    "issues": ""},
+  "license": "MIT",
+  "icon": "assets/more_adobe/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.skniro.butterequipment.ButterEquipment"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.11.0",
+    "minecraft": ">=1.14"
+  }
+}
