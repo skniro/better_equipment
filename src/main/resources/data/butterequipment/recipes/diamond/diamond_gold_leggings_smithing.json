@@ -1,10 +1,10 @@
 {
   "type": "minecraft:smithing",
   "addition": {
-    "item": "minecraft:diamond_ingot"
+    "item": "minecraft:diamond"
   },
   "base": {
-    "item": "minecraft:gold_leggings"
+    "item": "minecraft:golden_leggings"
   },
   "result": {
     "item": "minecraft:diamond_leggings"
