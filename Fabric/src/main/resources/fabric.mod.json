@@ -15,6 +15,9 @@
   "icon": "assets/more_adobe/icon.png",
   "environment": "*",
   "entrypoints": {
+    "fabric-datagen": [
+      "com.skniro.butterequipment.datagen.ModDataGenerator"
+    ],
     "main": [
       "com.skniro.butterequipment.ButterEquipment"
     ]
