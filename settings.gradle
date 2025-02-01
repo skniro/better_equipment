@@ -12,5 +12,5 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'BetterEquipment-1.20'
-include("Fabric", "Forge")
+rootProject.name = 'BetterEquipment-1.20.5-1.21.1'
+include("Fabric", "Forge", "Neoforge")
