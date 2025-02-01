@@ -3,12 +3,8 @@
   "category": "misc",
   "group": "misc",
   "key": {
-    "#": {
-      "tag": "minecraft:planks"
-    },
-    "G": {
-      "item": "minecraft:cobblestone"
-    }
+    "#": "#minecraft:planks",
+    "G": "minecraft:cobblestone"
   },
   "pattern": [
     "###",
