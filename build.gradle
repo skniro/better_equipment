@@ -1,3 +1,25 @@
+buildscript {
+    repositories {
+        gradlePluginPortal()
+        maven {
+            name = "Forge"
+            url = "https://maven.minecraftforge.net"
+        }
+        maven {
+            name = "Fabric"
+            url = "https://maven.fabricmc.net/"
+        }
+    }
+    dependencies {
+        classpath 'com.modrinth.minotaur:Minotaur:2.+'
+        classpath 'gradle.plugin.org.jetbrains.gradle.plugin.idea-ext:gradle-idea-ext:1.1.7'
+    }
+}
+
+
+apply plugin: 'org.jetbrains.gradle.plugin.idea-ext'
+
+
 subprojects {
     
     apply plugin: 'java'
