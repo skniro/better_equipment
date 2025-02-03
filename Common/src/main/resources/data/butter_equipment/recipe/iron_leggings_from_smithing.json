@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "minecraft:iron_ingot",
+  "base": "minecraft:leather_leggings",
+  "result": {
+    "count": 1,
+    "id": "minecraft:iron_leggings"
+  },
+  "template": "minecraft:netherite_upgrade_smithing_template"
+}
