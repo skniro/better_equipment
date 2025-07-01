@@ -13,4 +13,4 @@ pluginManagement {
 }
 
 rootProject.name = 'BetterEquipment-1.21.2+'
-include("Fabric", "Forge", "Neoforge", "Common")
+include("Forge", "Common")
