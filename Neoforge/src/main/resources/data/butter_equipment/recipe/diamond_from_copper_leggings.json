@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "minecraft:diamond",
+  "base": "minecraft:copper_leggings",
+  "result": {
+    "id": "minecraft:diamond_leggings"
+  },
+  "template": "minecraft:netherite_upgrade_smithing_template"
+}

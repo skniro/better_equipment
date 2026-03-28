@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "minecraft:diamond",
+  "base": "minecraft:copper_pickaxe",
+  "result": {
+    "id": "minecraft:diamond_pickaxe"
+  },
+  "template": "minecraft:netherite_upgrade_smithing_template"
+}

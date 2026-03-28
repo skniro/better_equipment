@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:mod_netherite_upgrade_smithing_template"
+        "recipe": "butter_equipment:mod_netherite_upgrade_smithing_template"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -37,7 +37,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:mod_netherite_upgrade_smithing_template"
+      "butter_equipment:mod_netherite_upgrade_smithing_template"
     ]
   }
 }

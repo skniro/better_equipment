@@ -11,8 +11,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.modrinth.minotaur:Minotaur:2.+'
-        classpath 'gradle.plugin.org.jetbrains.gradle.plugin.idea-ext:gradle-idea-ext:1.1.7'
+        classpath 'gradle.plugin.org.jetbrains.gradle.plugin.idea-ext:gradle-idea-ext:1.4.1'
     }
 }
 
@@ -26,7 +25,7 @@ subprojects {
     apply plugin: 'idea'
     apply plugin: 'maven-publish'
 
-    java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+    java.toolchain.languageVersion = JavaLanguageVersion.of(25)
     java.withSourcesJar()
     java.withJavadocJar()
         
@@ -47,26 +46,11 @@ subprojects {
         }
     }
     
-    repositories {
-
-        mavenCentral()
-
-        maven {
-            name = 'Sponge / Mixin'
-            url = 'https://repo.spongepowered.org/repository/maven-public/'
-        }
-
-        maven {
-            name = 'BlameJared Maven (CrT / Bookshelf)'
-            url = 'https://maven.blamejared.com'
-        }
-    }
-    
 
     tasks.withType(JavaCompile).configureEach {
     
         it.options.encoding = 'UTF-8'
-        it.options.release = 21
+        it.options.release = 25
     }
 
     // Disables Gradle's custom module metadata from being published to maven. The

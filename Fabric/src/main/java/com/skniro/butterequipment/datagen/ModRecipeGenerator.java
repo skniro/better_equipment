@@ -1,386 +1,488 @@
 package com.skniro.butterequipment.datagen;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.minecraft.data.server.recipe.*;
-import net.minecraft.item.Items;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.book.RecipeCategory;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.SmithingTransformRecipeBuilder;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+
 
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
 
 public class ModRecipeGenerator extends FabricRecipeProvider {
 
-    public ModRecipeGenerator(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+    public ModRecipeGenerator(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, registriesFuture);
     }
 
     @Override
-    protected RecipeGenerator getRecipeGenerator(RegistryWrapper.WrapperLookup registryLookup, RecipeExporter exporter) {
-        return new RecipeGenerator(registryLookup, exporter) {
+    protected RecipeProvider createRecipeProvider(HolderLookup.Provider registryLookup, RecipeOutput exporter) {
+        return new RecipeProvider(registryLookup, exporter) {
             @Override
-            public void generate() {
-                createShaped(RecipeCategory.MISC, Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE)
-                        .input('#', ItemTags.PLANKS)
-                        .input('G', Items.COBBLESTONE)
+            public void buildRecipes() {
+                shaped(RecipeCategory.MISC, Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE)
+                        .define('#', ItemTags.PLANKS)
+                        .define('G', Items.COBBLESTONE)
                         .pattern("###")
                         .pattern("#G#")
                         .pattern("###")
                         .group("misc")
-                        .criterion("has_base_item", conditionsFromTag(ItemTags.PLANKS))
-                        .criterion(hasItem(Items.COBBLESTONE), conditionsFromItem(Items.COBBLESTONE))
-                        .offerTo(exporter, "mod_netherite_upgrade_smithing_template");
+                        .unlockedBy("has_base_item", has(ItemTags.PLANKS))
+                        .unlockedBy(getHasName(Items.COBBLESTONE), has(Items.COBBLESTONE))
+                        .save(exporter, "mod_netherite_upgrade_smithing_template");
 
-                SmithingTransformRecipeJsonBuilder.create(
-                                Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                                Ingredient.ofItems(Items.GOLDEN_AXE),
-                                Ingredient.ofItems(Items.DIAMOND),
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.GOLDEN_AXE),
+                                Ingredient.of(Items.DIAMOND),
                                 RecipeCategory.MISC,
                                 Items.DIAMOND_AXE
                         )
-                        .criterion("has_base_item", conditionsFromItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
-                        .criterion("has_base_item2", conditionsFromItem(Items.GOLDEN_AXE))
-                        .criterion("has_base_item3", conditionsFromItem(Items.DIAMOND))
-                        .offerTo(exporter, "diamond_gold_axe_from_smithing");
+                        .unlocks("has_base_item", has(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+                        .unlocks("has_base_item2", has(Items.GOLDEN_AXE))
+                        .unlocks("has_base_item3", has(Items.DIAMOND))
+                        .save(exporter, "diamond_gold_axe_from_smithing");
 
-                SmithingTransformRecipeJsonBuilder.create(
-                                Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                                Ingredient.ofItems(Items.GOLDEN_BOOTS),
-                                Ingredient.ofItems(Items.DIAMOND),
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.GOLDEN_BOOTS),
+                                Ingredient.of(Items.DIAMOND),
                                 RecipeCategory.MISC,
                                 Items.DIAMOND_BOOTS
                         )
-                        .criterion(hasItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), conditionsFromItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
-                        .criterion(hasItem(Items.GOLDEN_BOOTS), conditionsFromItem(Items.GOLDEN_BOOTS))
-                        .criterion(hasItem(Items.DIAMOND), conditionsFromItem(Items.DIAMOND))
-                        .offerTo(exporter, "diamond_gold_boots_from_smithing");
+                        .unlocks(getHasName(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), has(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+                        .unlocks(getHasName(Items.GOLDEN_BOOTS), has(Items.GOLDEN_BOOTS))
+                        .unlocks(getHasName(Items.DIAMOND), has(Items.DIAMOND))
+                        .save(exporter, "diamond_gold_boots_from_smithing");
 
 
-                SmithingTransformRecipeJsonBuilder.create(
-                                Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                                Ingredient.ofItems(Items.GOLDEN_CHESTPLATE),
-                                Ingredient.ofItems(Items.DIAMOND),
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.GOLDEN_CHESTPLATE),
+                                Ingredient.of(Items.DIAMOND),
                                 RecipeCategory.MISC,
                                 Items.DIAMOND_CHESTPLATE
                         )
-                        .criterion(hasItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), conditionsFromItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
-                        .criterion(hasItem(Items.GOLDEN_CHESTPLATE), conditionsFromItem(Items.GOLDEN_CHESTPLATE))
-                        .criterion(hasItem(Items.DIAMOND), conditionsFromItem(Items.DIAMOND))
-                        .offerTo(exporter, "diamond_gold_chestplate_from_smithing");
+                        .unlocks(getHasName(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), has(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+                        .unlocks(getHasName(Items.GOLDEN_CHESTPLATE), has(Items.GOLDEN_CHESTPLATE))
+                        .unlocks(getHasName(Items.DIAMOND), has(Items.DIAMOND))
+                        .save(exporter, "diamond_gold_chestplate_from_smithing");
 
 
-                SmithingTransformRecipeJsonBuilder.create(
-                                Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                                Ingredient.ofItems(Items.GOLDEN_HELMET),
-                                Ingredient.ofItems(Items.DIAMOND),
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.GOLDEN_HELMET),
+                                Ingredient.of(Items.DIAMOND),
                                 RecipeCategory.MISC,
                                 Items.DIAMOND_HELMET
                         )
-                        .criterion(hasItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), conditionsFromItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
-                        .criterion(hasItem(Items.GOLDEN_HELMET), conditionsFromItem(Items.GOLDEN_HELMET))
-                        .criterion(hasItem(Items.DIAMOND), conditionsFromItem(Items.DIAMOND))
-                        .offerTo(exporter, "diamond_gold_helmet_from_smithing");
+                        .unlocks(getHasName(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), has(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+                        .unlocks(getHasName(Items.GOLDEN_HELMET), has(Items.GOLDEN_HELMET))
+                        .unlocks(getHasName(Items.DIAMOND), has(Items.DIAMOND))
+                        .save(exporter, "diamond_gold_helmet_from_smithing");
 
 
-                SmithingTransformRecipeJsonBuilder.create(
-                                Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                                Ingredient.ofItems(Items.GOLDEN_HOE),
-                                Ingredient.ofItems(Items.DIAMOND),
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.GOLDEN_HOE),
+                                Ingredient.of(Items.DIAMOND),
                                 RecipeCategory.MISC,
                                 Items.DIAMOND_HOE
                         )
-                        .criterion(hasItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), conditionsFromItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
-                        .criterion(hasItem(Items.GOLDEN_HOE), conditionsFromItem(Items.GOLDEN_HOE))
-                        .criterion(hasItem(Items.DIAMOND), conditionsFromItem(Items.DIAMOND))
-                        .offerTo(exporter, "diamond_gold_hoe_from_smithing");
+                        .unlocks(getHasName(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), has(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+                        .unlocks(getHasName(Items.GOLDEN_HOE), has(Items.GOLDEN_HOE))
+                        .unlocks(getHasName(Items.DIAMOND), has(Items.DIAMOND))
+                        .save(exporter, "diamond_gold_hoe_from_smithing");
 
 
-                SmithingTransformRecipeJsonBuilder.create(
-                                Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                                Ingredient.ofItems(Items.GOLDEN_LEGGINGS),
-                                Ingredient.ofItems(Items.DIAMOND),
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.GOLDEN_LEGGINGS),
+                                Ingredient.of(Items.DIAMOND),
                                 RecipeCategory.MISC,
                                 Items.DIAMOND_LEGGINGS
                         )
-                        .criterion(hasItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), conditionsFromItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
-                        .criterion(hasItem(Items.GOLDEN_LEGGINGS), conditionsFromItem(Items.GOLDEN_LEGGINGS))
-                        .criterion(hasItem(Items.DIAMOND), conditionsFromItem(Items.DIAMOND))
-                        .offerTo(exporter, "diamond_gold_leggings_from_smithing");
+                        .unlocks(getHasName(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), has(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+                        .unlocks(getHasName(Items.GOLDEN_LEGGINGS), has(Items.GOLDEN_LEGGINGS))
+                        .unlocks(getHasName(Items.DIAMOND), has(Items.DIAMOND))
+                        .save(exporter, "diamond_gold_leggings_from_smithing");
 
 
-                SmithingTransformRecipeJsonBuilder.create(
-                                Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                                Ingredient.ofItems(Items.GOLDEN_PICKAXE),
-                                Ingredient.ofItems(Items.DIAMOND),
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.GOLDEN_PICKAXE),
+                                Ingredient.of(Items.DIAMOND),
                                 RecipeCategory.MISC,
                                 Items.DIAMOND_PICKAXE
                         )
-                        .criterion(hasItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), conditionsFromItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
-                        .criterion(hasItem(Items.GOLDEN_PICKAXE), conditionsFromItem(Items.GOLDEN_PICKAXE))
-                        .criterion(hasItem(Items.DIAMOND), conditionsFromItem(Items.DIAMOND))
-                        .offerTo(exporter, "diamond_gold_pickaxe_from_smithing");
+                        .unlocks(getHasName(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), has(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+                        .unlocks(getHasName(Items.GOLDEN_PICKAXE), has(Items.GOLDEN_PICKAXE))
+                        .unlocks(getHasName(Items.DIAMOND), has(Items.DIAMOND))
+                        .save(exporter, "diamond_gold_pickaxe_from_smithing");
 
 
-                SmithingTransformRecipeJsonBuilder.create(
-                                Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                                Ingredient.ofItems(Items.GOLDEN_SHOVEL),
-                                Ingredient.ofItems(Items.DIAMOND),
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.GOLDEN_SHOVEL),
+                                Ingredient.of(Items.DIAMOND),
                                 RecipeCategory.MISC,
                                 Items.DIAMOND_SHOVEL
                         )
-                        .criterion(hasItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), conditionsFromItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
-                        .criterion(hasItem(Items.GOLDEN_SHOVEL), conditionsFromItem(Items.GOLDEN_SHOVEL))
-                        .criterion(hasItem(Items.DIAMOND), conditionsFromItem(Items.DIAMOND))
-                        .offerTo(exporter, "diamond_gold_shovel_from_smithing");
+                        .unlocks(getHasName(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), has(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+                        .unlocks(getHasName(Items.GOLDEN_SHOVEL), has(Items.GOLDEN_SHOVEL))
+                        .unlocks(getHasName(Items.DIAMOND), has(Items.DIAMOND))
+                        .save(exporter, "diamond_gold_shovel_from_smithing");
 
 
-                SmithingTransformRecipeJsonBuilder.create(
-                                Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                                Ingredient.ofItems(Items.GOLDEN_SWORD),
-                                Ingredient.ofItems(Items.DIAMOND),
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.GOLDEN_SWORD),
+                                Ingredient.of(Items.DIAMOND),
                                 RecipeCategory.MISC,
                                 Items.DIAMOND_SWORD
                         )
-                        .criterion(hasItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), conditionsFromItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
-                        .criterion(hasItem(Items.GOLDEN_SWORD), conditionsFromItem(Items.GOLDEN_SWORD))
-                        .criterion(hasItem(Items.DIAMOND), conditionsFromItem(Items.DIAMOND))
-                        .offerTo(exporter, "diamond_gold_sword_from_smithing");
+                        .unlocks(getHasName(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), has(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+                        .unlocks(getHasName(Items.GOLDEN_SWORD), has(Items.GOLDEN_SWORD))
+                        .unlocks(getHasName(Items.DIAMOND), has(Items.DIAMOND))
+                        .save(exporter, "diamond_gold_sword_from_smithing");
 
 
-                SmithingTransformRecipeJsonBuilder.create(
-                                Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                                Ingredient.ofItems(Items.IRON_AXE),
-                                Ingredient.ofItems(Items.DIAMOND),
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.IRON_AXE),
+                                Ingredient.of(Items.DIAMOND),
                                 RecipeCategory.MISC,
                                 Items.DIAMOND_AXE
                         )
-                        .criterion(hasItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), conditionsFromItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
-                        .criterion(hasItem(Items.IRON_AXE), conditionsFromItem(Items.IRON_AXE))
-                        .criterion(hasItem(Items.DIAMOND), conditionsFromItem(Items.DIAMOND))
-                        .offerTo(exporter, "diamond_iron_axe_from_smithing");
+                        .unlocks(getHasName(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), has(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+                        .unlocks(getHasName(Items.IRON_AXE), has(Items.IRON_AXE))
+                        .unlocks(getHasName(Items.DIAMOND), has(Items.DIAMOND))
+                        .save(exporter, "diamond_iron_axe_from_smithing");
 
 
-                SmithingTransformRecipeJsonBuilder.create(
-                                Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                                Ingredient.ofItems(Items.IRON_BOOTS),
-                                Ingredient.ofItems(Items.DIAMOND),
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.IRON_BOOTS),
+                                Ingredient.of(Items.DIAMOND),
                                 RecipeCategory.MISC,
                                 Items.DIAMOND_BOOTS
                         )
-                        .criterion(hasItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), conditionsFromItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
-                        .criterion(hasItem(Items.IRON_BOOTS), conditionsFromItem(Items.IRON_BOOTS))
-                        .criterion(hasItem(Items.DIAMOND), conditionsFromItem(Items.DIAMOND))
-                        .offerTo(exporter, "diamond_iron_boots_from_smithing");
+                        .unlocks(getHasName(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), has(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+                        .unlocks(getHasName(Items.IRON_BOOTS), has(Items.IRON_BOOTS))
+                        .unlocks(getHasName(Items.DIAMOND), has(Items.DIAMOND))
+                        .save(exporter, "diamond_iron_boots_from_smithing");
 
 
-                SmithingTransformRecipeJsonBuilder.create(
-                                Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                                Ingredient.ofItems(Items.IRON_CHESTPLATE),
-                                Ingredient.ofItems(Items.DIAMOND),
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.IRON_CHESTPLATE),
+                                Ingredient.of(Items.DIAMOND),
                                 RecipeCategory.MISC,
                                 Items.DIAMOND_CHESTPLATE
                         )
-                        .criterion(hasItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), conditionsFromItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
-                        .criterion(hasItem(Items.IRON_CHESTPLATE), conditionsFromItem(Items.IRON_CHESTPLATE))
-                        .criterion(hasItem(Items.DIAMOND), conditionsFromItem(Items.DIAMOND))
-                        .offerTo(exporter, "diamond_iron_chestplate_from_smithing");
+                        .unlocks(getHasName(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), has(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+                        .unlocks(getHasName(Items.IRON_CHESTPLATE), has(Items.IRON_CHESTPLATE))
+                        .unlocks(getHasName(Items.DIAMOND), has(Items.DIAMOND))
+                        .save(exporter, "diamond_iron_chestplate_from_smithing");
 
 
-                SmithingTransformRecipeJsonBuilder.create(
-                                Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                                Ingredient.ofItems(Items.IRON_HELMET),
-                                Ingredient.ofItems(Items.DIAMOND),
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.IRON_HELMET),
+                                Ingredient.of(Items.DIAMOND),
                                 RecipeCategory.MISC,
                                 Items.DIAMOND_HELMET
                         )
-                        .criterion(hasItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), conditionsFromItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
-                        .criterion(hasItem(Items.IRON_HELMET), conditionsFromItem(Items.IRON_HELMET))
-                        .criterion(hasItem(Items.DIAMOND), conditionsFromItem(Items.DIAMOND))
-                        .offerTo(exporter, "diamond_iron_helmet_from_smithing");
+                        .unlocks(getHasName(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), has(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+                        .unlocks(getHasName(Items.IRON_HELMET), has(Items.IRON_HELMET))
+                        .unlocks(getHasName(Items.DIAMOND), has(Items.DIAMOND))
+                        .save(exporter, "diamond_iron_helmet_from_smithing");
 
 
-                SmithingTransformRecipeJsonBuilder.create(
-                                Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                                Ingredient.ofItems(Items.IRON_HOE),
-                                Ingredient.ofItems(Items.DIAMOND),
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.IRON_HOE),
+                                Ingredient.of(Items.DIAMOND),
                                 RecipeCategory.MISC,
                                 Items.DIAMOND_HOE
                         )
-                        .criterion(hasItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), conditionsFromItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
-                        .criterion(hasItem(Items.IRON_HOE), conditionsFromItem(Items.IRON_HOE))
-                        .criterion(hasItem(Items.DIAMOND), conditionsFromItem(Items.DIAMOND))
-                        .offerTo(exporter, "diamond_iron_hoe_from_smithing");
+                        .unlocks(getHasName(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), has(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+                        .unlocks(getHasName(Items.IRON_HOE), has(Items.IRON_HOE))
+                        .unlocks(getHasName(Items.DIAMOND), has(Items.DIAMOND))
+                        .save(exporter, "diamond_iron_hoe_from_smithing");
 
 
-                SmithingTransformRecipeJsonBuilder.create(
-                                Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                                Ingredient.ofItems(Items.IRON_LEGGINGS),
-                                Ingredient.ofItems(Items.DIAMOND),
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.IRON_LEGGINGS),
+                                Ingredient.of(Items.DIAMOND),
                                 RecipeCategory.MISC,
                                 Items.DIAMOND_LEGGINGS
                         )
-                        .criterion(hasItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), conditionsFromItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
-                        .criterion(hasItem(Items.IRON_LEGGINGS), conditionsFromItem(Items.IRON_LEGGINGS))
-                        .criterion(hasItem(Items.DIAMOND), conditionsFromItem(Items.DIAMOND))
-                        .offerTo(exporter, "diamond_iron_leggings_from_smithing");
+                        .unlocks(getHasName(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), has(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+                        .unlocks(getHasName(Items.IRON_LEGGINGS), has(Items.IRON_LEGGINGS))
+                        .unlocks(getHasName(Items.DIAMOND), has(Items.DIAMOND))
+                        .save(exporter, "diamond_iron_leggings_from_smithing");
 
 
-                SmithingTransformRecipeJsonBuilder.create(
-                                Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                                Ingredient.ofItems(Items.IRON_PICKAXE),
-                                Ingredient.ofItems(Items.DIAMOND),
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.IRON_PICKAXE),
+                                Ingredient.of(Items.DIAMOND),
                                 RecipeCategory.MISC,
                                 Items.DIAMOND_PICKAXE
                         )
-                        .criterion(hasItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), conditionsFromItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
-                        .criterion(hasItem(Items.IRON_PICKAXE), conditionsFromItem(Items.IRON_PICKAXE))
-                        .criterion(hasItem(Items.DIAMOND), conditionsFromItem(Items.DIAMOND))
-                        .offerTo(exporter, "diamond_iron_pickaxe_from_smithing");
+                        .unlocks(getHasName(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), has(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+                        .unlocks(getHasName(Items.IRON_PICKAXE), has(Items.IRON_PICKAXE))
+                        .unlocks(getHasName(Items.DIAMOND), has(Items.DIAMOND))
+                        .save(exporter, "diamond_iron_pickaxe_from_smithing");
 
 
-                SmithingTransformRecipeJsonBuilder.create(
-                                Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                                Ingredient.ofItems(Items.IRON_SHOVEL),
-                                Ingredient.ofItems(Items.DIAMOND),
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.IRON_SHOVEL),
+                                Ingredient.of(Items.DIAMOND),
                                 RecipeCategory.MISC,
                                 Items.DIAMOND_SHOVEL
                         )
-                        .criterion(hasItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), conditionsFromItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
-                        .criterion(hasItem(Items.IRON_SHOVEL), conditionsFromItem(Items.IRON_SHOVEL))
-                        .criterion(hasItem(Items.DIAMOND), conditionsFromItem(Items.DIAMOND))
-                        .offerTo(exporter, "diamond_iron_shovel_from_smithing");
+                        .unlocks(getHasName(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), has(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+                        .unlocks(getHasName(Items.IRON_SHOVEL), has(Items.IRON_SHOVEL))
+                        .unlocks(getHasName(Items.DIAMOND), has(Items.DIAMOND))
+                        .save(exporter, "diamond_iron_shovel_from_smithing");
 
 
-                SmithingTransformRecipeJsonBuilder.create(
-                                Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                                Ingredient.ofItems(Items.IRON_SWORD),
-                                Ingredient.ofItems(Items.DIAMOND),
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.IRON_SWORD),
+                                Ingredient.of(Items.DIAMOND),
                                 RecipeCategory.MISC,
                                 Items.DIAMOND_SWORD
                         )
-                        .criterion(hasItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), conditionsFromItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
-                        .criterion(hasItem(Items.IRON_SWORD), conditionsFromItem(Items.IRON_SWORD))
-                        .criterion(hasItem(Items.DIAMOND), conditionsFromItem(Items.DIAMOND))
-                        .offerTo(exporter, "diamond_iron_sword_from_smithing");
+                        .unlocks(getHasName(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), has(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+                        .unlocks(getHasName(Items.IRON_SWORD), has(Items.IRON_SWORD))
+                        .unlocks(getHasName(Items.DIAMOND), has(Items.DIAMOND))
+                        .save(exporter, "diamond_iron_sword_from_smithing");
 
-                SmithingTransformRecipeJsonBuilder.create(
-                                Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                                Ingredient.ofItems(Items.STONE_AXE),
-                                Ingredient.ofItems(Items.IRON_INGOT),
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.STONE_AXE),
+                                Ingredient.of(Items.IRON_INGOT),
                                 RecipeCategory.MISC,
                                 Items.IRON_AXE
                         )
-                        .criterion(hasItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), conditionsFromItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
-                        .criterion(hasItem(Items.STONE_AXE), conditionsFromItem(Items.STONE_AXE))
-                        .criterion(hasItem(Items.IRON_INGOT), conditionsFromItem(Items.IRON_INGOT))
-                        .offerTo(exporter, "iron_axe_from_smithing");
+                        .unlocks(getHasName(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), has(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+                        .unlocks(getHasName(Items.STONE_AXE), has(Items.STONE_AXE))
+                        .unlocks(getHasName(Items.IRON_INGOT), has(Items.IRON_INGOT))
+                        .save(exporter, "iron_axe_from_smithing");
 
 
-                SmithingTransformRecipeJsonBuilder.create(
-                                Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                                Ingredient.ofItems(Items.LEATHER_BOOTS),
-                                Ingredient.ofItems(Items.IRON_INGOT),
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.LEATHER_BOOTS),
+                                Ingredient.of(Items.IRON_INGOT),
                                 RecipeCategory.MISC,
                                 Items.IRON_BOOTS
                         )
-                        .criterion(hasItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), conditionsFromItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
-                        .criterion(hasItem(Items.LEATHER_BOOTS), conditionsFromItem(Items.LEATHER_BOOTS))
-                        .criterion(hasItem(Items.IRON_INGOT), conditionsFromItem(Items.IRON_INGOT))
-                        .offerTo(exporter, "iron_boots_from_smithing");
+                        .unlocks(getHasName(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), has(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+                        .unlocks(getHasName(Items.LEATHER_BOOTS), has(Items.LEATHER_BOOTS))
+                        .unlocks(getHasName(Items.IRON_INGOT), has(Items.IRON_INGOT))
+                        .save(exporter, "iron_boots_from_smithing");
 
 
-                SmithingTransformRecipeJsonBuilder.create(
-                                Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                                Ingredient.ofItems(Items.LEATHER_CHESTPLATE),
-                                Ingredient.ofItems(Items.IRON_INGOT),
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.LEATHER_CHESTPLATE),
+                                Ingredient.of(Items.IRON_INGOT),
                                 RecipeCategory.MISC,
                                 Items.IRON_CHESTPLATE
                         )
-                        .criterion(hasItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), conditionsFromItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
-                        .criterion(hasItem(Items.LEATHER_CHESTPLATE), conditionsFromItem(Items.LEATHER_CHESTPLATE))
-                        .criterion(hasItem(Items.IRON_INGOT), conditionsFromItem(Items.IRON_INGOT))
-                        .offerTo(exporter, "iron_chestplate_from_smithing");
+                        .unlocks(getHasName(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), has(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+                        .unlocks(getHasName(Items.LEATHER_CHESTPLATE), has(Items.LEATHER_CHESTPLATE))
+                        .unlocks(getHasName(Items.IRON_INGOT), has(Items.IRON_INGOT))
+                        .save(exporter, "iron_chestplate_from_smithing");
 
 
-                SmithingTransformRecipeJsonBuilder.create(
-                                Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                                Ingredient.ofItems(Items.LEATHER_HELMET),
-                                Ingredient.ofItems(Items.IRON_INGOT),
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.LEATHER_HELMET),
+                                Ingredient.of(Items.IRON_INGOT),
                                 RecipeCategory.MISC,
                                 Items.IRON_HELMET
                         )
-                        .criterion(hasItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), conditionsFromItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
-                        .criterion(hasItem(Items.LEATHER_HELMET), conditionsFromItem(Items.LEATHER_HELMET))
-                        .criterion(hasItem(Items.IRON_INGOT), conditionsFromItem(Items.IRON_INGOT))
-                        .offerTo(exporter, "iron_helmet_from_smithing");
+                        .unlocks(getHasName(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), has(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+                        .unlocks(getHasName(Items.LEATHER_HELMET), has(Items.LEATHER_HELMET))
+                        .unlocks(getHasName(Items.IRON_INGOT), has(Items.IRON_INGOT))
+                        .save(exporter, "iron_helmet_from_smithing");
 
 
-                SmithingTransformRecipeJsonBuilder.create(
-                                Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                                Ingredient.ofItems(Items.STONE_HOE),
-                                Ingredient.ofItems(Items.IRON_INGOT),
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.STONE_HOE),
+                                Ingredient.of(Items.IRON_INGOT),
                                 RecipeCategory.MISC,
                                 Items.IRON_HOE
                         )
-                        .criterion(hasItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), conditionsFromItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
-                        .criterion(hasItem(Items.STONE_HOE), conditionsFromItem(Items.STONE_HOE))
-                        .criterion(hasItem(Items.IRON_INGOT), conditionsFromItem(Items.IRON_INGOT))
-                        .offerTo(exporter, "iron_hoe_from_smithing");
+                        .unlocks(getHasName(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), has(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+                        .unlocks(getHasName(Items.STONE_HOE), has(Items.STONE_HOE))
+                        .unlocks(getHasName(Items.IRON_INGOT), has(Items.IRON_INGOT))
+                        .save(exporter, "iron_hoe_from_smithing");
 
 
-                SmithingTransformRecipeJsonBuilder.create(
-                                Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                                Ingredient.ofItems(Items.LEATHER_LEGGINGS),
-                                Ingredient.ofItems(Items.IRON_INGOT),
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.LEATHER_LEGGINGS),
+                                Ingredient.of(Items.IRON_INGOT),
                                 RecipeCategory.MISC,
                                 Items.IRON_LEGGINGS
                         )
-                        .criterion(hasItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), conditionsFromItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
-                        .criterion(hasItem(Items.LEATHER_LEGGINGS), conditionsFromItem(Items.LEATHER_LEGGINGS))
-                        .criterion(hasItem(Items.IRON_INGOT), conditionsFromItem(Items.IRON_INGOT))
-                        .offerTo(exporter, "iron_leggings_from_smithing");
+                        .unlocks(getHasName(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), has(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+                        .unlocks(getHasName(Items.LEATHER_LEGGINGS), has(Items.LEATHER_LEGGINGS))
+                        .unlocks(getHasName(Items.IRON_INGOT), has(Items.IRON_INGOT))
+                        .save(exporter, "iron_leggings_from_smithing");
 
 
-                SmithingTransformRecipeJsonBuilder.create(
-                                Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                                Ingredient.ofItems(Items.STONE_PICKAXE),
-                                Ingredient.ofItems(Items.IRON_INGOT),
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.STONE_PICKAXE),
+                                Ingredient.of(Items.IRON_INGOT),
                                 RecipeCategory.MISC,
                                 Items.IRON_PICKAXE
                         )
-                        .criterion(hasItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), conditionsFromItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
-                        .criterion(hasItem(Items.STONE_PICKAXE), conditionsFromItem(Items.STONE_PICKAXE))
-                        .criterion(hasItem(Items.IRON_INGOT), conditionsFromItem(Items.IRON_INGOT))
-                        .offerTo(exporter, "iron_pickaxe_from_smithing");
+                        .unlocks(getHasName(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), has(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+                        .unlocks(getHasName(Items.STONE_PICKAXE), has(Items.STONE_PICKAXE))
+                        .unlocks(getHasName(Items.IRON_INGOT), has(Items.IRON_INGOT))
+                        .save(exporter, "iron_pickaxe_from_smithing");
 
 
-                SmithingTransformRecipeJsonBuilder.create(
-                                Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                                Ingredient.ofItems(Items.STONE_SHOVEL),
-                                Ingredient.ofItems(Items.IRON_INGOT),
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.STONE_SHOVEL),
+                                Ingredient.of(Items.IRON_INGOT),
                                 RecipeCategory.MISC,
                                 Items.IRON_SHOVEL
                         )
-                        .criterion(hasItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), conditionsFromItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
-                        .criterion(hasItem(Items.STONE_SHOVEL), conditionsFromItem(Items.STONE_SHOVEL))
-                        .criterion(hasItem(Items.IRON_INGOT), conditionsFromItem(Items.IRON_INGOT))
-                        .offerTo(exporter, "iron_shovel_from_smithing");
+                        .unlocks(getHasName(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), has(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+                        .unlocks(getHasName(Items.STONE_SHOVEL), has(Items.STONE_SHOVEL))
+                        .unlocks(getHasName(Items.IRON_INGOT), has(Items.IRON_INGOT))
+                        .save(exporter, "iron_shovel_from_smithing");
 
 
-                SmithingTransformRecipeJsonBuilder.create(
-                                Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                                Ingredient.ofItems(Items.STONE_SWORD),
-                                Ingredient.ofItems(Items.IRON_INGOT),
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.STONE_SWORD),
+                                Ingredient.of(Items.IRON_INGOT),
                                 RecipeCategory.MISC,
                                 Items.IRON_SWORD
                         )
-                        .criterion(hasItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), conditionsFromItem(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
-                        .criterion(hasItem(Items.STONE_SWORD), conditionsFromItem(Items.STONE_SWORD))
-                        .criterion(hasItem(Items.IRON_INGOT), conditionsFromItem(Items.IRON_INGOT))
-                        .offerTo(exporter, "iron_sword_from_smithing");
+                        .unlocks(getHasName(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE), has(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE))
+                        .unlocks(getHasName(Items.STONE_SWORD), has(Items.STONE_SWORD))
+                        .unlocks(getHasName(Items.IRON_INGOT), has(Items.IRON_INGOT))
+                        .save(exporter, "iron_sword_from_smithing");
+
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.COPPER_HELMET),
+                                Ingredient.of(Items.DIAMOND),
+                                RecipeCategory.MISC,
+                                Items.DIAMOND_HELMET
+                        )
+                        .unlocks(getHasName(Items.COPPER_HELMET), has(Items.COPPER_HELMET))
+                        .unlocks(getHasName(Items.DIAMOND), has(Items.DIAMOND))
+                        .save(exporter, "diamond_from_copper_helmet");
+
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.COPPER_CHESTPLATE),
+                                Ingredient.of(Items.DIAMOND),
+                                RecipeCategory.MISC,
+                                Items.DIAMOND_CHESTPLATE
+                        )
+                        .unlocks(getHasName(Items.COPPER_CHESTPLATE), has(Items.COPPER_CHESTPLATE))
+                        .unlocks(getHasName(Items.DIAMOND), has(Items.DIAMOND))
+                        .save(exporter, "diamond_from_copper_chestplate");
+
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.COPPER_LEGGINGS),
+                                Ingredient.of(Items.DIAMOND),
+                                RecipeCategory.MISC,
+                                Items.DIAMOND_LEGGINGS
+                        )
+                        .unlocks(getHasName(Items.COPPER_LEGGINGS), has(Items.COPPER_LEGGINGS))
+                        .unlocks(getHasName(Items.DIAMOND), has(Items.DIAMOND))
+                        .save(exporter, "diamond_from_copper_leggings");
+
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.COPPER_BOOTS),
+                                Ingredient.of(Items.DIAMOND),
+                                RecipeCategory.MISC,
+                                Items.DIAMOND_BOOTS
+                        )
+                        .unlocks(getHasName(Items.COPPER_BOOTS), has(Items.COPPER_BOOTS))
+                        .unlocks(getHasName(Items.DIAMOND), has(Items.DIAMOND))
+                        .save(exporter, "diamond_from_copper_boots");
+
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.COPPER_AXE),
+                                Ingredient.of(Items.DIAMOND),
+                                RecipeCategory.MISC,
+                                Items.DIAMOND_AXE
+                        )
+                        .unlocks(getHasName(Items.COPPER_AXE), has(Items.COPPER_AXE))
+                        .unlocks(getHasName(Items.DIAMOND), has(Items.DIAMOND))
+                        .save(exporter, "diamond_from_copper_axe");
+
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.COPPER_PICKAXE),
+                                Ingredient.of(Items.DIAMOND),
+                                RecipeCategory.MISC,
+                                Items.DIAMOND_PICKAXE
+                        )
+                        .unlocks(getHasName(Items.COPPER_PICKAXE), has(Items.COPPER_PICKAXE))
+                        .unlocks(getHasName(Items.DIAMOND), has(Items.DIAMOND))
+                        .save(exporter, "diamond_from_copper_pickaxe");
+
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.COPPER_SHOVEL),
+                                Ingredient.of(Items.DIAMOND),
+                                RecipeCategory.MISC,
+                                Items.DIAMOND_SHOVEL
+                        )
+                        .unlocks(getHasName(Items.COPPER_SHOVEL), has(Items.COPPER_SHOVEL))
+                        .unlocks(getHasName(Items.DIAMOND), has(Items.DIAMOND))
+                        .save(exporter, "diamond_from_copper_shovel");
+
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.COPPER_HOE),
+                                Ingredient.of(Items.DIAMOND),
+                                RecipeCategory.MISC,
+                                Items.DIAMOND_HOE
+                        )
+                        .unlocks(getHasName(Items.COPPER_HOE), has(Items.COPPER_HOE))
+                        .unlocks(getHasName(Items.DIAMOND), has(Items.DIAMOND))
+                        .save(exporter, "diamond_from_copper_hoe");
+
+                SmithingTransformRecipeBuilder.smithing(
+                                Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                                Ingredient.of(Items.COPPER_SWORD),
+                                Ingredient.of(Items.DIAMOND),
+                                RecipeCategory.MISC,
+                                Items.DIAMOND_SWORD
+                        )
+                        .unlocks(getHasName(Items.COPPER_SWORD), has(Items.COPPER_SWORD))
+                        .unlocks(getHasName(Items.DIAMOND), has(Items.DIAMOND))
+                        .save(exporter, "diamond_from_copper_sword");
             }
         };
     }

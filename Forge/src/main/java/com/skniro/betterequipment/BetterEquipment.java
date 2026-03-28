@@ -1,7 +1,6 @@
 package com.skniro.betterequipment;
 
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -14,8 +13,8 @@ public class BetterEquipment {
     public static final String MODID = "betterequipment";
 
 
-    public BetterEquipment() {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+    public BetterEquipment(FMLJavaModLoadingContext context) {
+        var modEventBus = context.getModBusGroup();
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {

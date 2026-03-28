@@ -3,7 +3,6 @@
   "addition": "minecraft:iron_ingot",
   "base": "minecraft:leather_chestplate",
   "result": {
-    "count": 1,
     "id": "minecraft:iron_chestplate"
   },
   "template": "minecraft:netherite_upgrade_smithing_template"

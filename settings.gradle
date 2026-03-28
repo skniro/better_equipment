@@ -9,8 +9,16 @@ pluginManagement {
             name = 'Sponge Snapshots'
             url = 'https://repo.spongepowered.org/repository/maven-public/'
         }
+        maven {
+            name = "NeoForge"
+            url = "https://maven.neoforged.net/releases"
+        }
+        maven {
+            name = "Forge"
+            url = "https://maven.minecraftforge.net"
+        }
     }
 }
 
-rootProject.name = 'BetterEquipment-1.21.2+'
+rootProject.name = 'BetterEquipment-26.1'
 include("Fabric", "Forge", "Neoforge", "Common")

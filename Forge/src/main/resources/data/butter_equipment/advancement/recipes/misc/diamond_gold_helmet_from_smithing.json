@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:diamond_gold_helmet_from_smithing"
+        "recipe": "butter_equipment:diamond_gold_helmet_from_smithing"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -48,7 +48,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:diamond_gold_helmet_from_smithing"
+      "butter_equipment:diamond_gold_helmet_from_smithing"
     ]
   }
 }

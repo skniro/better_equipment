@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "minecraft:diamond",
+  "base": "minecraft:copper_sword",
+  "result": {
+    "id": "minecraft:diamond_sword"
+  },
+  "template": "minecraft:netherite_upgrade_smithing_template"
+}
